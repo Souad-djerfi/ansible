@@ -1,0 +1,47 @@
+- name: Play web -création apache directories ans user name in web serveurs
+  become: yes
+  
+  hosts: webserver
+  tasks:
+    - name:  création groupe admin
+      group:
+        name: admin
+        state: present
+    
+    - name: création du user apachadm
+      user:
+        name: apacheadm
+        state: present
+        password: "{{ 'password' | password_hash('sha512') }}"
+        groups: users, admin
+        append: yes
+        home: /home/apachadm
+        create_home: yes
+  
+    - name: installation apache2
+      apt:
+        name: apache2
+        state: latest
+
+- name: play app - creation utilisateur
+  hosts: dbserver
+  become: yes
+  tasks:
+    - name: création du user utilisateur
+      user:
+        name: utilisateur
+        state: present
+        password: "{{ 'password' | password_hash('sha512') }}"
+        group: users
+        home: /home/utilisateur
+        create_home: yes
+  
+    - name: créer un repertoire /opt/oracle
+      file:
+        path: /opt/oracle
+        state: directory
+        owner: utilisateur
+        group: users
+        mode: 0755
+   
+

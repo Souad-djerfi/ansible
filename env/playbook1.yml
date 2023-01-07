@@ -1,0 +1,24 @@
+- name: jinja2
+  hosts: all
+  vars: 
+    items:
+    - valeur1
+    - valeur2
+    - valeur3
+
+  tasks:
+  - name: debug
+    debug:
+      msg:
+        {% for i in items %}
+        {{ i }}
+        {% endfor %}
+        
+
+  - name: copy
+    copy:
+      content:
+        {% for i in items %}
+        {{ item }}        
+        {% endfor %}
+      dest: /tmp/test_jinja.txt 

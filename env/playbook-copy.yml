@@ -1,0 +1,17 @@
+- name: Variables et boucle avec copy
+  hosts: all
+  become: yes
+  vars:
+   mesfichers:
+            - { source: "test1.txt", destination: "/tmp/test1.txt", mode: "0755", owner: "vagrant"}
+            - { source: "test2.txt", destination: "/home/vagrant/test2.txt", mode: "0644", owner: "vagrant"}
+   tasks:
+   - name: copy
+     copy:                                                                                                                                    
+       src: "{{ item.source }}"                                                                                                               
+       dest: "{{ item.destination }}"                                                                                                         
+       mode: "{{ item.mode }}"                                                                                                          
+       owner: "{{ item.owner }}"
+     with_items:                                                                                                                              
+       - "{{ mesfichiers }}" 
+
